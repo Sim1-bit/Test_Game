@@ -53,7 +53,6 @@ namespace Test_Multiplayer_Game
                 // Invia messaggi al client (può essere modificato per inviare dinamicamente)
                 while (true)
                 {
-                    Console.Write("Server: ");
                     string messaggio = Program.player.PosX.ToString() + ';' + Program.player.PosY.ToString() + ';' + Program.player.Skin.ToString()
                         + ';' + Program.player.AnimationX.ToString() + ';' + (Program.player.AnimationY / 4 / 32).ToString();
                     byte[] data = Encoding.UTF8.GetBytes(messaggio);
