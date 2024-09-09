@@ -52,7 +52,7 @@ namespace Test_Multiplayer_Game
 
         public static void KeyPressed(object sender, KeyEventArgs e)
         {
-            if (e.Code == Keyboard.Key.W || e.Code == Keyboard.Key.A || e.Code == Keyboard.Key.S || e.Code == Keyboard.Key.D || e.Code == Keyboard.Key.Enter)
+            if (e.Code == Keyboard.Key.W || e.Code == Keyboard.Key.A || e.Code == Keyboard.Key.S || e.Code == Keyboard.Key.D)
             {
                 player.KeyPressed(e);
 

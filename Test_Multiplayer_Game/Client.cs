@@ -11,7 +11,6 @@ namespace Test_Multiplayer_Game
 {
     class Client : Online
     {
-        private TcpListener server;
         private TcpClient client;
         private NetworkStream stream;
 

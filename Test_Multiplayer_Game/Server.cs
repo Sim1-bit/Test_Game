@@ -43,7 +43,6 @@ namespace Test_Multiplayer_Game
         {
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
-            int byteCount;
 
             try
             {
