@@ -8,7 +8,7 @@ namespace Test_Multiplayer_Game
 {
     class Program
     {
-        static Online online;
+        public static Online online;
 
         static RenderWindow window;
         const int proportion = 48;

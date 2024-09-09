@@ -54,7 +54,8 @@ namespace Test_Multiplayer_Game
                 while (true)
                 {
                     Console.Write("Server: ");
-                    string messaggio = Console.ReadLine();
+                    string messaggio = Program.player.PosX.ToString() + ';' + Program.player.PosY.ToString() + ';' + Program.player.Skin.ToString()
+                        + ';' + Program.player.AnimationX.ToString() + ';' + (Program.player.AnimationY / 4 / 32).ToString();
                     byte[] data = Encoding.UTF8.GetBytes(messaggio);
                     stream.Write(data, 0, data.Length);
                 }
@@ -88,6 +89,11 @@ namespace Test_Multiplayer_Game
                 Console.WriteLine("Errore nella ricezione dei messaggi dal client: " + e.Message);
 
             }
+        }
+
+        public void SendMessage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

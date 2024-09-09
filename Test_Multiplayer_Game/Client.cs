@@ -71,16 +71,14 @@ namespace Test_Multiplayer_Game
             }
         }
 
-        private void SendMessage()
+        public void SendMessage()
         {
             try
             {
-                while (true)
-                {
-                    string messaggio = Console.ReadLine();
-                    byte[] data = Encoding.UTF8.GetBytes(messaggio);
-                    stream.Write(data, 0, data.Length);
-                }
+                string messaggio = Program.player.PosX.ToString() + ';' + Program.player.PosY.ToString() + ';' + Program.player.Skin.ToString()
+                       + ';' + Program.player.AnimationX.ToString() + ';' + (Program.player.AnimationY / 4 / 32).ToString();
+                byte[] data = Encoding.UTF8.GetBytes(messaggio);
+                stream.Write(data, 0, data.Length);
             }
             catch (Exception e)
             {

@@ -21,6 +21,15 @@ namespace Test_Multiplayer_Game
                 skin = value < 0 || value > 5 ? 0 : value;
             }
         }
+        public int AnimationX
+        {
+            get => animation.X;
+        }
+
+        public int AnimationY
+        {
+            get => animation.Y;
+        }
 
         private Vector2i animation;
 
@@ -144,6 +153,11 @@ namespace Test_Multiplayer_Game
             }
             animation.X = (animation.X + 1) % 4;
             sprite.TextureRect = new IntRect(animation.X * 16, (animation.Y + Skin * 4) * 32, 16, 32);
+            if (Program.online is Client)
+                (Program.online as Client).SendMessage();
+            /*else
+                (Program.online as Server).SendMessage();*/
+
         }
 
         public void DrawnPlayer()
