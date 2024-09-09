@@ -11,6 +11,17 @@ namespace Test_Multiplayer_Game
 {
     class Player
     {
+        private int skin;
+
+        public int Skin
+        {
+            get => skin;
+            set
+            {
+                skin = value < 0 || value > 5 ? 0 : value;
+            }
+        }
+
         private Vector2i animation;
 
         private int proportion;
@@ -58,21 +69,23 @@ namespace Test_Multiplayer_Game
             }
         }
 
-        public Player(int proportion, RenderWindow window, Map map)
+        public Player(int proportion, RenderWindow window, Map map, int skin)
         {
             Proportion = proportion;
 
             this.window = window;
+
+            Skin = skin;
 
             posMap = new Vector2i(5, 5);
             this.sprite = new Sprite(new Texture(@"..\..\..\FilePNG\Sprite\Sprite.png"), new IntRect(0, 0, 255, 255));
             
             sprite.Scale = new Vector2f(3 * proportion / 45, 3 * proportion / 45);
             sprite.Position = new Vector2f(PosX * proportion + proportion / 2, PosY * proportion + proportion / 2);
-            sprite.TextureRect = new IntRect(0, 0, 16, 32);
+            sprite.TextureRect = new IntRect(0, Skin * 32 * 4, 16, 32);
             sprite.Origin = new Vector2f(sprite.GetLocalBounds().Left + sprite.GetLocalBounds().Width / 2, sprite.GetLocalBounds().Top + sprite.GetLocalBounds().Height / 2);
 
-            animation = new Vector2i(0, 0);
+            animation = new Vector2i(0, Skin * 4 * 32);
 
             View view = new View(new FloatRect(0, 0, window.Size.X, window.Size.Y));
             view.Center = sprite.Position;
@@ -82,7 +95,7 @@ namespace Test_Multiplayer_Game
             this.map = map;
         }
 
-        public Player(Player aux, Map map) : this(aux.proportion, aux.window, aux.map)
+        public Player(Player aux) : this(aux.proportion, aux.window, aux.map, aux.Skin)
         {
 
         }
@@ -130,7 +143,7 @@ namespace Test_Multiplayer_Game
                     break;
             }
             animation.X = (animation.X + 1) % 4;
-            sprite.TextureRect = new IntRect(animation.X * 16, (animation.Y + 0) * 32, 16, 32);
+            sprite.TextureRect = new IntRect(animation.X * 16, (animation.Y + Skin * 4) * 32, 16, 32);
         }
 
         public void DrawnPlayer()

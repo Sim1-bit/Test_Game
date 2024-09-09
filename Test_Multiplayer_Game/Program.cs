@@ -1,18 +1,22 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Test_Multiplayer_Game
 {
     class Program
     {
+        static Online online;
+
         static RenderWindow window;
         const int proportion = 48;
 
         public static Map map;
         public static Player player;
 
+        public static List<Player> players;
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -22,7 +26,11 @@ namespace Test_Multiplayer_Game
             window.Closed += (sender, args) => window.Close();
 
             map = new Map(proportion);
-            player = new Player(proportion, window, map);
+            player = new Player(proportion, window, map, 1);
+
+            players = new List<Player>();
+
+            players.Add(player);
 
             window.KeyPressed += KeyPressed;
 
@@ -32,7 +40,11 @@ namespace Test_Multiplayer_Game
                 window.Clear();
 
                 map.Draw(window);
-                player.DrawnPlayer();
+
+                foreach (var player in players)
+                {
+                    player.DrawnPlayer();
+                }
 
                 window.Display();
             }
@@ -49,6 +61,10 @@ namespace Test_Multiplayer_Game
                 view.Zoom(0.6f);
                 window.SetView(view);
             }
+            else if (e.Code == Keyboard.Key.H)
+                online = new Server();
+            else if(e.Code == Keyboard.Key.Enter)
+                online = new Client();
         }
     }
 }
