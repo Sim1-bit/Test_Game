@@ -6,6 +6,7 @@ using SFML.System;
 using SFML.Window;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Test_Multiplayer_Game
 {
@@ -31,7 +32,7 @@ namespace Test_Multiplayer_Game
             get => animation.Y;
         }
 
-        private Vector2i animation;
+        protected Vector2i animation;
 
         private int proportion;
 
@@ -56,12 +57,11 @@ namespace Test_Multiplayer_Game
 
         private RenderWindow window;
 
-        public readonly Sprite sprite;
-
+        protected Sprite sprite;
 
         private Map map;
 
-        private Vector2i posMap;
+        protected Vector2i posMap;
 
         public int PosX
         {
@@ -78,17 +78,31 @@ namespace Test_Multiplayer_Game
             }
         }
 
-        public Player(int proportion, RenderWindow window, Map map, int skin)
+        public Player(int skin)
         {
-            Proportion = proportion;
+            Initialize(skin);
+        }
 
-            this.window = window;
+        public Player(Player aux) : this(aux.Skin)
+        {
+
+        }
+
+        public Player()
+        {
+        }
+
+        protected virtual void Initialize(int skin)
+        {
+            Proportion = Program.proportion;
+
+            this.window = Program.window;
 
             Skin = skin;
 
             posMap = new Vector2i(5, 5);
-            this.sprite = new Sprite(new Texture(@"..\..\..\FilePNG\Sprite\Sprite.png"), new IntRect(0, 0, 255, 255));
-            
+            sprite = new Sprite(new Texture(@"..\..\..\FilePNG\Sprite\Sprite.png"), new IntRect(0, 0, 255, 255));
+
             sprite.Scale = new Vector2f(3 * proportion / 45, 3 * proportion / 45);
             sprite.Position = new Vector2f(PosX * proportion + proportion / 2, PosY * proportion + proportion / 2);
             sprite.TextureRect = new IntRect(0, Skin * 32 * 4, 16, 32);
@@ -101,12 +115,7 @@ namespace Test_Multiplayer_Game
             view.Zoom(0.6f);
             window.SetView(view);
 
-            this.map = map;
-        }
-
-        public Player(Player aux) : this(aux.proportion, aux.window, aux.map, aux.Skin)
-        {
-
+            this.map = Program.map;
         }
 
         public void KeyPressed(KeyEventArgs e)
@@ -153,8 +162,14 @@ namespace Test_Multiplayer_Game
             }
             animation.X = (animation.X + 1) % 4;
             sprite.TextureRect = new IntRect(animation.X * 16, (animation.Y + Skin * 4) * 32, 16, 32);
-            if (Program.online is Client)
-                (Program.online as Client).SendMessage();
+
+            View view = new View(new FloatRect(0, 0, window.Size.X, window.Size.Y));
+            view.Center = sprite.Position;
+            view.Zoom(0.6f);
+            window.SetView(view);
+
+            if (Program.online is Guest)
+                (Program.online as Guest).SendMessage();
             /*else
                 (Program.online as Server).SendMessage();*/
 

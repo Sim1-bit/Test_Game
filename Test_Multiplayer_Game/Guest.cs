@@ -6,15 +6,19 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SFML.Audio;
+using SFML.Graphics;
+using SFML.System;
+using SFML.Window;
 
 namespace Test_Multiplayer_Game
 {
-    class Client : Online
+    class Guest : Online
     {
         private TcpClient client;
         private NetworkStream stream;
 
-        public Client()
+        public Guest()
         {
             //new Thread(Start).Start();
         }
