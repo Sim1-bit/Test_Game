@@ -33,9 +33,11 @@ namespace Test_Multiplayer_Game
 
                 stream = client.GetStream();
 
+                Client client1 = new Client(client);
+
                 // Avvia thread separati per l'invio e la ricezione
-                Thread invioThread = new Thread(SendMessage);
-                Thread ricezioneThread = new Thread(ReceiveMessage);
+                Thread invioThread = new Thread(client1.SendMessage);
+                Thread ricezioneThread = new Thread(client1.ReceiveMessage);
 
                 invioThread.Start();
                 ricezioneThread.Start();
@@ -49,45 +51,6 @@ namespace Test_Multiplayer_Game
                 Console.WriteLine("Errore nel client: " + e.Message);
             }
 
-        }
-
-        protected void ReceiveMessage()
-        {
-            byte[] buffer = new byte[1024];
-            int byteCount;
-
-            try
-            {
-                while ((byteCount = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    string messaggio = Encoding.UTF8.GetString(buffer, 0, byteCount);
-                    Console.WriteLine("\nMessaggio ricevuto dal server: " + messaggio);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Errore nella ricezione dei messaggi: " + e.Message);
-            }
-            finally
-            {
-                stream.Close();
-                client.Close();
-            }
-        }
-
-        public void SendMessage()
-        {
-            try
-            {
-                string messaggio = Program.player.PosX.ToString() + ';' + Program.player.PosY.ToString() + ';' + Program.player.Skin.ToString()
-                       + ';' + Program.player.AnimationX.ToString() + ';' + (Program.player.AnimationY / 4 / 32).ToString();
-                byte[] data = Encoding.UTF8.GetBytes(messaggio);
-                stream.Write(data, 0, data.Length);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Errore nell'invio dei messaggi: " + e.Message);
-            }
         }
     }
 }

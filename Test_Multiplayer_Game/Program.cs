@@ -26,7 +26,12 @@ namespace Test_Multiplayer_Game
             window.Closed += (sender, args) => window.Close();
 
             map = new Map(proportion);
-            player = new Player(1);
+            player = new Player(2);
+
+            View view = new View(new FloatRect(0, 0, window.Size.X, window.Size.Y));
+            view.Center = player.Sprite.Position;
+            view.Zoom(0.6f);
+            window.SetView(view);
 
             players = new List<Player>();
 

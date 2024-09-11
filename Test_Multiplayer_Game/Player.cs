@@ -7,6 +7,7 @@ using SFML.Window;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.Intrinsics.X86;
+using static Test_Multiplayer_Game.Host;
 
 namespace Test_Multiplayer_Game
 {
@@ -56,6 +57,11 @@ namespace Test_Multiplayer_Game
         }
 
         private RenderWindow window;
+
+        public Sprite Sprite
+        {
+            get => sprite;
+        }
 
         protected Sprite sprite;
 
@@ -109,11 +115,6 @@ namespace Test_Multiplayer_Game
             sprite.Origin = new Vector2f(sprite.GetLocalBounds().Left + sprite.GetLocalBounds().Width / 2, sprite.GetLocalBounds().Top + sprite.GetLocalBounds().Height / 2);
 
             animation = new Vector2i(0, Skin * 4 * 32);
-
-            View view = new View(new FloatRect(0, 0, window.Size.X, window.Size.Y));
-            view.Center = sprite.Position;
-            view.Zoom(0.6f);
-            window.SetView(view);
 
             this.map = Program.map;
         }
@@ -169,10 +170,25 @@ namespace Test_Multiplayer_Game
             window.SetView(view);
 
             if (Program.online is Guest)
-                (Program.online as Guest).SendMessage();
-            /*else
-                (Program.online as Server).SendMessage();*/
-
+            {
+                foreach (var player in Program.players)
+                {
+                    if (player is Client)
+                    {
+                        (player as Client).SendMessage();
+                    }
+                }
+            }
+            else if (Program.online is Host)
+            {
+                foreach (var player in Program.players)
+                {
+                    if (player is Client)
+                    {
+                        (player as Client).SendMessage();
+                    }
+                }
+            }
         }
 
         public void DrawnPlayer()
